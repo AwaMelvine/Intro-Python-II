@@ -101,8 +101,7 @@ while not done:
         selected = direction.split(' ')[1]
         if selected in items:
             newPlayer.on_take(items.get(selected))
-            print(newPlayer)
-            displayPlayerInventory(newPlayer)
+            print(f"You have picked up {items.get(selected).name}")
         else:
             print("Item not found")
     else:
