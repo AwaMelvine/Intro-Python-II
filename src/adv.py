@@ -1,5 +1,6 @@
 from room import Room
 from player import Player
+from item import Item
 
 # Declare all the rooms
 
@@ -33,6 +34,16 @@ room['overlook'].s_to = room['foyer']
 room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
+
+
+# Put some items inside some of the rooms
+items = [
+    Item('Apple', 'A fruit you can eat.'), Item(
+        'Ball', 'Kids and grown ups alike run after it and kick it away when they meet it')
+]
+
+room['foyer'].items.append(items[0])
+room['narrow'].items.append(items[1])
 
 #
 # Main
