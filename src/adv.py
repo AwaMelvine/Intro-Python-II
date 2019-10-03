@@ -37,13 +37,13 @@ room['treasure'].s_to = room['narrow']
 
 
 # Put some items inside some of the rooms
-items = [
-    Item('Apple', 'A fruit you can eat.'), Item(
-        'Ball', 'Kids and grown ups alike run after it and kick it away when they meet it')
-]
+items = {
+    "apple": Item('Apple', 'A fruit you can eat.'),
+    "ball": Item('Ball', 'Kids and grown ups alike run after it and kick it away when they meet it')
+}
 
-room['foyer'].items.append(items[0])
-room['narrow'].items.append(items[1])
+room['foyer'].items.append(items['apple'])
+room['narrow'].items.append(items['ball'])
 
 #
 # Main
@@ -72,6 +72,15 @@ def movePlayer(side, current_room):
     return current_room
 
 
+def displayPlayerInventory(player):
+    if len(player.inventory) == 0:
+        print(f"\nYou currently have no items")
+    else:
+        print(f"\nYou are carrying:\n")
+        for item in player.inventory:
+            print(f"{item.name}")
+
+
 print("\nWELCOME TO ADVENTURELAND!\n\t\tINSTRUCTIONS\nEnter 'n', 'w', 's', 'e' to navigate\nEnter command to add or drop itmes or q to quit:")
 
 done = False
@@ -87,11 +96,13 @@ while not done:
     elif direction in ['n', 'w', 's', 'e']:
         newPlayer.current_room = movePlayer(direction, newPlayer.current_room)
     elif direction == 'i':
-        if len(newPlayer.inventory) == 0:
-            print(f"\nYou currently have no items")
+        displayPlayerInventory(newPlayer)
+    elif direction == 'take apple' or direction == 'get apple':
+        picked = direction.split(' ')[1]
+        if picked in items:
+            newPlayer.inventory.append(items.get(picked))
+            displayPlayerInventory(newPlayer)
         else:
-            print(f"\nYou are carrying:\n")
-            for item in newPlayer.inventory:
-                print(f"{item.name}")
+            print(f"There is no {picked} in this room")
     else:
         print("Invalid command\n")
