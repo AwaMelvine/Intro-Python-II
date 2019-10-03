@@ -109,5 +109,13 @@ while not done:
             newPlayer.current_room.items.remove(selectedItem)
         else:
             print("Item not found here")
+    elif direction.split(' ')[0] == 'drop':
+        selectedItem = items.get(direction.split(' ')[1])
+        if selectedItem in newPlayer.inventory:
+            newPlayer.inventory.remove(selectedItem)
+            selectedItem.on_drop()
+            newPlayer.current_room.items.append(selectedItem)
+        else:
+            print("Item not found here")
     else:
         print("Invalid command\n")
