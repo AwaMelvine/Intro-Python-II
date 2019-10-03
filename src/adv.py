@@ -39,10 +39,12 @@ room['treasure'].s_to = room['narrow']
 # Put some items inside some of the rooms
 items = {
     "apple": Item('Apple', 'A fruit you can eat.'),
-    "ball": Item('Ball', 'Kids and grown ups alike run after it and kick it away when they meet it')
+    "ball": Item('Ball', 'Kids and grown ups alike run after it and kick it away when they meet it'),
+    "car": Item('Car', 'A moving box that moves people from one place to another, crying all the while')
 }
 
 room['foyer'].items.append(items['apple'])
+room['foyer'].items.append(items['car'])
 room['narrow'].items.append(items['ball'])
 
 #
@@ -76,9 +78,11 @@ def displayPlayerInventory(player):
     if len(player.inventory) == 0:
         print(f"\nYou currently have no items")
     else:
-        print(f"\nYou are carrying:\n")
+        print(f"\nYou are carrying:")
+        i = 0
         for item in player.inventory:
-            print(f"{item.name}")
+            i += 1
+            print(f"{i}. {item.name}")
 
 
 print("\nWELCOME TO ADVENTURELAND!\n\t\tINSTRUCTIONS\nEnter 'n', 'w', 's', 'e' to navigate\nEnter command to add or drop itmes or q to quit:")
@@ -102,6 +106,7 @@ while not done:
         if selected in items:
             newPlayer.on_take(items.get(selected))
             print(f"You have picked up {items.get(selected).name}")
+            newPlayer.current_room.items.remove(items.get(selected))
         else:
             print("Item not found")
     else:
