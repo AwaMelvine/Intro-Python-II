@@ -102,12 +102,12 @@ while not done:
     elif direction == 'i':
         displayPlayerInventory(newPlayer)
     elif direction.split(' ')[0] == 'take' or direction.split(' ')[0] == 'get':
-        selected = direction.split(' ')[1]
-        if selected in items:
-            newPlayer.on_take(items.get(selected))
-            print(f"You have picked up {items.get(selected).name}")
-            newPlayer.current_room.items.remove(items.get(selected))
+        selectedItem = items.get(direction.split(' ')[1])
+        if selectedItem in newPlayer.current_room.items:
+            newPlayer.inventory.append(selectedItem)
+            selectedItem.on_take()
+            newPlayer.current_room.items.remove(selectedItem)
         else:
-            print("Item not found")
+            print("Item not found here")
     else:
         print("Invalid command\n")
