@@ -1,6 +1,5 @@
 from room import Room
 from player import Player
-import textwrap
 
 # Declare all the rooms
 
@@ -53,44 +52,29 @@ newPlayer = Player("Awa", room["outside"])
 #
 # If the user enters "q", quit the game.
 
-current_room = newPlayer.current_room
 
-print("WELCOME TO ADVENTURELAND!\n")
-
-
-def displayCurrentRoom():
-    print("CURRENT ROOM:")
-    print(f"Room          ===> {current_room.name}")
-    print(f"Description:  ===> {textwrap.fill(current_room.description)}\n")
+def movePlayer(side, current_room):
+    attrib = side + '_to'
+    if hasattr(current_room, attrib):
+        return getattr(current_room, attrib)
+    print("Oops, no passage there. Try again...")
+    return current_room
 
 
-displayCurrentRoom()
+print("\nWELCOME TO ADVENTURELAND!\n")
 
-direction = ''
+done = False
 
-while direction != 'q':
+while not done:
+    print(newPlayer.current_room)
+
     direction = input(
-        "Choose direction ('n', 'w', 's', 'e') or q to quit: ")
-    if len(direction) == 0:
-        print("\nInvalid input!. Exiting...\n")
-        exit()
+        "Enter 'n', 'w', 's', 'e' or q to quit: ").strip().lower()
 
-    if direction not in ['n', 'w', 's', 'e']:
-        print("\nWrong direction! Exiting...\n")
-        exit()
+    if direction == 'q':
+        print("\nGood Bye!")
+        done = True
+    elif direction in ['n', 'w', 's', 'e']:
+        newPlayer.current_room = movePlayer(direction, newPlayer.current_room)
     else:
-        if direction == 'n' and current_room.n_to:
-            current_room = current_room.n_to
-        elif direction == 'e' and current_room.e_to:
-            current_room = current_room.e_to
-        elif direction == 'w' and current_room.w_to:
-            current_room = current_room.w_to
-        elif direction == 's' and current_room.s_to:
-            current_room = current_room.s_to
-        else:
-            print('Oops, try a different passage')
-            continue
-    displayCurrentRoom()
-
-else:
-    exit()
+        print("Invalid command\n")
