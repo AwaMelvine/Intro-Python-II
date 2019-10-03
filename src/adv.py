@@ -61,20 +61,26 @@ def movePlayer(side, current_room):
     return current_room
 
 
-print("\nWELCOME TO ADVENTURELAND!\n")
+print("\nWELCOME TO ADVENTURELAND!\n\t\tINSTRUCTIONS\nEnter 'n', 'w', 's', 'e' to navigate\nEnter command to add or drop itmes or q to quit:")
 
 done = False
 
 while not done:
     print(newPlayer.current_room)
 
-    direction = input(
-        "Enter 'n', 'w', 's', 'e' or q to quit: ").strip().lower()
+    direction = input("Command> ").strip().lower()
 
     if direction == 'q':
         print("\nGood Bye!")
         done = True
     elif direction in ['n', 'w', 's', 'e']:
         newPlayer.current_room = movePlayer(direction, newPlayer.current_room)
+    elif direction == 'i':
+        if len(newPlayer.inventory) == 0:
+            print(f"\nYou currently have no items")
+        else:
+            print(f"\nYou are carrying:\n")
+            for item in newPlayer.inventory:
+                print(f"{item.name}")
     else:
         print("Invalid command\n")

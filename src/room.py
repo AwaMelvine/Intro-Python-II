@@ -8,8 +8,7 @@ class Room:
     def __init__(self, name, description):
         self.name = name
         self.description = description
-        self.items = [Item('Apple', 'A fruit you can eat.'), Item(
-            'Ball', 'Kids and grown ups alike run after it and kick it away when they meet it')]
+        self.items = []
 
     def __str__(self):
         roomInfo = f"\nCurrent Room: {self.name}\nDescription: {textwrap.fill(self.description)}\n"
