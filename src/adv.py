@@ -1,4 +1,6 @@
 from room import Room
+from player import Player
+from item import Item
 
 # Declare all the rooms
 
@@ -33,11 +35,24 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
+
+# Put some items inside some of the rooms
+items = {
+    "apple": Item('Apple', 'A fruit you can eat.'),
+    "ball": Item('Ball', 'Kids and grown ups alike run after it and kick it away when they meet it'),
+    "car": Item('Car', 'A moving box that moves people from one place to another, crying all the while')
+}
+
+room['foyer'].items.append(items['apple'])
+room['foyer'].items.append(items['car'])
+room['narrow'].items.append(items['ball'])
+
 #
 # Main
 #
 
 # Make a new player object that is currently in the 'outside' room.
+newPlayer = Player("Awa", room["outside"])
 
 # Write a loop that:
 #
@@ -49,3 +64,58 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+
+def movePlayer(side, current_room):
+    attrib = side + '_to'
+    if hasattr(current_room, attrib):
+        return getattr(current_room, attrib)
+    print("Oops, no passage there. Try again...")
+    return current_room
+
+
+def displayPlayerInventory(player):
+    if len(player.inventory) == 0:
+        print(f"\nYou currently have no items")
+    else:
+        print(f"\nYou are carrying:")
+        i = 0
+        for item in player.inventory:
+            i += 1
+            print(f"{i}. {item.name}")
+
+
+print("\nWELCOME TO ADVENTURELAND!\n\t\tINSTRUCTIONS\nEnter 'n', 'w', 's', 'e' to navigate\nEnter command to add or drop itmes or q to quit:")
+
+done = False
+
+while not done:
+    print(newPlayer.current_room)
+
+    direction = input("Command> ").strip().lower()
+
+    if direction == 'q':
+        print("\nGood Bye!")
+        done = True
+    elif direction in ['n', 'w', 's', 'e']:
+        newPlayer.current_room = movePlayer(direction, newPlayer.current_room)
+    elif direction == 'i':
+        displayPlayerInventory(newPlayer)
+    elif direction.split(' ')[0] == 'take' or direction.split(' ')[0] == 'get':
+        selectedItem = items.get(direction.split(' ')[1])
+        if selectedItem in newPlayer.current_room.items:
+            newPlayer.inventory.append(selectedItem)
+            selectedItem.on_take()
+            newPlayer.current_room.items.remove(selectedItem)
+        else:
+            print("Item not found here")
+    elif direction.split(' ')[0] == 'drop':
+        selectedItem = items.get(direction.split(' ')[1])
+        if selectedItem in newPlayer.inventory:
+            newPlayer.inventory.remove(selectedItem)
+            selectedItem.on_drop()
+            newPlayer.current_room.items.append(selectedItem)
+        else:
+            print("Item not found here")
+    else:
+        print("Invalid command\n")
